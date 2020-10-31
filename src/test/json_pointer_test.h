@@ -6,31 +6,163 @@
 
 namespace format
 {
-  /**
-  * @brief The json_pointer_test class
-  */
-  class json_pointer_test : public unit_test
+  namespace test
   {
-    public:
-    class json_pointer_accessor : public json_pointer
+   /**
+    * @brief The json_pointer_test class
+    */
+    class json_pointer_test : public unit_test
+    {};
+
+    TEST_F (json_pointer_test, path_next)
     {
-      public:
-      json_pointer_accessor (const wchar_t * const path)
-        : json_pointer (path) {}
+      struct assert
+      {
+        const wchar_t *ref_token;
+        std::vector<const wchar_t *> key_vec;
+        int assert_status;
+      };
 
-      std::size_t
-      _parse (const wchar_t * const path)
-      { return json_pointer::_parse (path); }
-    };
-  };
+      std::vector<struct assert > test = {
+        { L"", { L"" } , T_PASS },
+        { L"/foo", { L"foo" } , T_PASS },
+        { L"/foo/0", { L"foo", L"0" } , T_PASS },
+        { L"/1/0123/foo", { L"1", L"0123", L"foo" } , T_PASS },
+      };
 
-  TEST_F (json_pointer_test, test_parse)
-  {
-    json_pointer_accessor jp (L"");
-    std::size_t c = jp._parse (L"/foo/bar");
+      TEST_IT_START
 
-    ASSERT_EQ (c, 0);
-  }
-}
+          json_pointer::reference_token rt ((*it).ref_token);
+
+          for (auto exp_it = (*it).key_vec.begin (); exp_it != (*it).key_vec.end (); ++exp_it)
+            {
+              const wchar_t *act_key = rt.path_next ();
+              const wchar_t *exp_key = (*exp_it);
+
+              ASSERT_STREQ (act_key, exp_key);
+            }
+
+      TEST_IT_END
+    }
+
+    TEST_F (json_pointer_test, parse)
+    {
+      json_pointer jp (L"");
+      std::size_t c = jp._parse (L"/foo/bar");
+
+      ASSERT_EQ (c, 0);
+
+      struct assert
+      {
+        const wchar_t *ref_token;
+        value::value_t type;
+        long num_val;
+        int assert_status;
+      };
+
+      std::vector<struct assert > test =
+        {
+        { L"", value::value_t::object_t, 0, T_PASS },
+        { L"/foo", value::value_t::array_t, 0, T_PASS },
+        { L"/foo/-", value::value_t::undefined_t, 0, T_PASS },
+        { L"/not", value::value_t::undefined_t, 0, T_PASS },
+        { L"/not/found", value::value_t::undefined_t, 0, T_FAIL },
+      };
+
+      TEST_IT_START
+
+          /* format::value & v = j.point ((*it).ref_token);
+          ASSERT_EQUAL_IDX ("point type", (*it).type, v.type ())
+
+          if (v.type () == value::number_t)
+            {
+              format::number & n = static_cast<format::number &> (v);
+              ASSERT_EQUAL_IDX ("point numeric value", (*it).num_val, static_cast<long> (n.get ()))
+            } */
+
+      TEST_IT_END
+    }
+
+    TEST_F (json_pointer_test, decode)
+    {
+      struct assert
+      {
+        const wchar_t *endoced;
+        const wchar_t *dedoced;
+        int assert_status;
+      };
+
+      std::vector<struct assert > test = {
+        { L"012", L"012", T_PASS },
+        { L"~0", L"~", T_PASS },
+        { L"~1", L"/", T_PASS },
+        { L"~01", L"~1", T_PASS },
+        { L"~012", L"~12", T_PASS },
+        { L"~", L"~", T_FAIL },   // NOTE: throwing exception leak 8 bytes
+        { L"~2", L"~2", T_FAIL }  // NOTE: throwing exception leak 12 bytes
+      };
+
+      const wchar_t * key_begin = nullptr;
+
+      TEST_IT_START
+
+        const wchar_t *encoded = (*it).endoced;
+
+        wchar_t *key_cursor = new wchar_t[wcslen (encoded) + 1] ();
+        /* const wchar_t * const */ key_begin = key_cursor;
+
+        while (*encoded != 0)
+          key_cursor = json_pointer::reference_token::decode (key_cursor, & encoded);
+
+        ASSERT_STREQ (key_begin, (*it).dedoced);
+
+        delete [] key_begin; // FIXME: not freed when json_pointer_error thrown
+
+        }
+      catch (format::json_pointer_error & pe)
+        {
+          this->_errorc[ACTUAL]++; std::cerr << pe.what () << std::endl;
+          delete [] key_begin;
+        }
+      }
+    }
+
+    // test__point
+    TEST_F (json_pointer_test, point)
+    {
+
+    }
+
+    // test_is_index
+    TEST_F (json_pointer_test, is_index)
+    {
+      struct assert
+      {
+        const wchar_t *key;
+        bool is_index;
+        int assert_status;
+      };
+
+      std::vector<struct assert > test = {
+        { L"-", true, T_PASS },
+        { L"0", true, T_PASS },
+        { L"1", true, T_PASS },
+        { L"123", true, T_PASS },
+        { L"", false, T_PASS },
+        { L"01", false, T_PASS },
+        { L"a", false, T_PASS },
+        { L"1a", false, T_PASS },
+      };
+
+      TEST_IT_START
+
+        bool is_index = json_pointer::reference_token::is_index ((*it).key);
+        ASSERT_EQ ((*it).is_index, is_index);
+
+      TEST_IT_END
+    }
+
+  } // test
+} // format
 
 #endif // JSON_POINTER_TEST_H

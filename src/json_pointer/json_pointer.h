@@ -8,12 +8,29 @@
 
 namespace format
 {
+#ifdef UNIT_TEST_H
+  namespace test
+  {
+    class json_pointer_test_path_next_Test;
+    class json_pointer_test_parse_Test;
+    class json_pointer_test_decode_Test;
+    class json_pointer_test_is_index_Test;
+  }
+#endif
+
   /**
    * @brief The json_pointer class
    */
   class JSON_POINTER_EXPORT json_pointer
   {
   public:
+    #ifdef UNIT_TEST_H
+      friend class test::json_pointer_test_path_next_Test;
+      friend class test::json_pointer_test_parse_Test;
+      friend class test::json_pointer_test_decode_Test;
+      friend class test::json_pointer_test_is_index_Test;
+    #endif
+
     /**
      * @brief json_pointer
      * @param json_pointer
@@ -31,7 +48,7 @@ namespace format
     /**
      * @brief _json_pointer
      */
-    std::vector<const wchar_t * const> _json_pointer;
+    std::vector<const wchar_t *> _json_pointer;
 
     /**
      * @brief _parse
@@ -52,8 +69,10 @@ namespace format
     /**
      * @brief The reference_token class
      */
+    class json_pointer_test;
     class reference_token
     {
+      friend class json_pointer_test;
       /**
        * @brief The _sc enum Structural characters.
        */
