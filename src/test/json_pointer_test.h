@@ -47,40 +47,37 @@ namespace format
 
     TEST_F (json_pointer_test, parse)
     {
-      json_pointer jp (L"");
-      std::size_t c = jp._parse (L"/foo/bar");
-
-      ASSERT_EQ (c, 0);
-
       struct assert
       {
         const wchar_t *ref_token;
         value::value_t type;
-        long num_val;
+        std::size_t count;
         int assert_status;
       };
 
       std::vector<struct assert > test =
         {
         { L"", value::value_t::object_t, 0, T_PASS },
-        { L"/foo", value::value_t::array_t, 0, T_PASS },
-        { L"/foo/-", value::value_t::undefined_t, 0, T_PASS },
-        { L"/not", value::value_t::undefined_t, 0, T_PASS },
-        { L"/not/found", value::value_t::undefined_t, 0, T_FAIL },
+        { L"/foo", value::value_t::array_t, 1, T_PASS },
+        { L"/foo/bar", value::value_t::undefined_t, 2, T_PASS },
+        { nullptr, value::value_t::undefined_t, 0, T_FAIL }
       };
 
       TEST_IT_START
 
-          /* format::value & v = j.point ((*it).ref_token);
-          ASSERT_EQUAL_IDX ("point type", (*it).type, v.type ())
+            json_pointer jp(L"");
+            std::size_t count = jp._parse ((*it).ref_token);
 
-          if (v.type () == value::number_t)
-            {
-              format::number & n = static_cast<format::number &> (v);
-              ASSERT_EQUAL_IDX ("point numeric value", (*it).num_val, static_cast<long> (n.get ()))
-            } */
+            ASSERT_EQ (count, (*it).count);
+          }
+        catch (format::json_pointer_error & pe)
+          {
+            this->_errorc[ACTUAL]++;
+            std::cerr << pe.what () << std::endl;
+          }
+      }
 
-      TEST_IT_END
+      ASSERT_EQ (_errorc[ACTUAL], _errorc[EXPECTED]);
     }
 
     TEST_F (json_pointer_test, decode)
@@ -125,15 +122,15 @@ namespace format
           delete [] key_begin;
         }
       }
+
+      ASSERT_EQ (_errorc[ACTUAL], _errorc[EXPECTED]);
     }
 
-    // test__point
     TEST_F (json_pointer_test, point)
     {
-
+      // TODO
     }
 
-    // test_is_index
     TEST_F (json_pointer_test, is_index)
     {
       struct assert
@@ -162,7 +159,7 @@ namespace format
       TEST_IT_END
     }
 
-  } // test
-} // format
+  } // namespace test
+} //  namespace format
 
 #endif // JSON_POINTER_TEST_H
