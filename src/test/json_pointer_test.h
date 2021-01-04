@@ -11,8 +11,7 @@ namespace format
    /**
     * @brief The json_pointer_test class
     */
-    class json_pointer_test : public unit_test
-    {};
+    class json_pointer_test : public unit_test {};
 
     TEST_F (json_pointer_test, path_next)
     {
@@ -25,6 +24,7 @@ namespace format
 
       std::vector<struct assert > test = {
         { L"", { L"" } , T_PASS },
+        { L"/", { L"/" } , T_PASS },
         { L"/foo", { L"foo" } , T_PASS },
         { L"/foo/0", { L"foo", L"0" } , T_PASS },
         { L"/1/0123/foo", { L"1", L"0123", L"foo" } , T_PASS },
@@ -50,17 +50,17 @@ namespace format
       struct assert
       {
         const wchar_t *ref_token;
-        value::value_t type;
+
         std::size_t count;
         int assert_status;
       };
 
-      std::vector<struct assert > test =
-        {
-        { L"", value::value_t::object_t, 0, T_PASS },
-        { L"/foo", value::value_t::array_t, 1, T_PASS },
-        { L"/foo/bar", value::value_t::undefined_t, 2, T_PASS },
-        { nullptr, value::value_t::undefined_t, 0, T_FAIL }
+      std::vector<struct assert> test = {
+        { L"", 0, T_PASS },
+        { L"/", 1, T_PASS },
+        { L"/foo", 1, T_PASS },
+        { L"/foo/bar", 2, T_PASS },
+        { nullptr, 0, T_FAIL }
       };
 
       TEST_IT_START
@@ -128,7 +128,56 @@ namespace format
 
     TEST_F (json_pointer_test, point)
     {
-      // TODO
+      format::json j (  L"{ \"foo\": [\"bar\", \"baz\"],\
+                        \"\": 0,\
+                        \"a/b\": 1,\
+                        \"c%d\": 2,\
+                        \"e^f\": 3,\
+                        \"g|h\": 4,\
+                        \"i\\j\": 5,\
+                        \" \": 7,\
+                        \"m~n\": 8 }" );
+
+      // FIXME: \"k\"l\": 6 parse error
+
+      struct assert
+      {
+        const wchar_t *ref_token;
+        value::value_t type;
+        long num_val;
+        int assert_status;
+      };
+
+      std::vector<struct assert > test = {
+        { L"", value::value_t::object_t, 0, T_PASS },
+        { L"/foo", value::value_t::array_t, 0, T_PASS },
+        { L"/foo/1", value::value_t::string_t, 0, T_PASS },
+        { L"/", value::value_t::number_t, 0, T_PASS },
+        { L"a~1b", value::value_t::number_t, 1, T_PASS },
+        { L"c%d", value::value_t::number_t, 2, T_PASS },
+        { L"g|h", value::value_t::number_t, 4, T_PASS },
+        { L"i\\j", value::value_t::number_t, 5, T_PASS },
+        { L"/ ", value::value_t::number_t, 7, T_PASS },
+        { L"m~0n", value::value_t::number_t, 8, T_PASS },
+        { L"/not", value::value_t::undefined_t, 0, T_PASS },
+        { L"/not/found", value::value_t::undefined_t, 0, T_FAIL },
+        { L"/foo/foo", value::value_t::string_t, 0, T_FAIL },
+      };
+
+      TEST_IT_START
+
+          json_pointer jp ((*it).ref_token);
+          format::value & v = jp._point (j, jp._json_pointer.cbegin ());
+
+          ASSERT_EQ ((*it).type, v.type ());
+
+          if (v.type () == value::number_t)
+            {
+              format::number & n = static_cast<format::number &> (v);
+              ASSERT_EQ ( (*it).num_val, static_cast<long> (n.get ()));
+            }
+
+      TEST_IT_END
     }
 
     TEST_F (json_pointer_test, is_index)

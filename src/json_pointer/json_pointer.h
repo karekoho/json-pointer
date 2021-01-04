@@ -15,6 +15,7 @@ namespace format
     class json_pointer_test_parse_Test;
     class json_pointer_test_decode_Test;
     class json_pointer_test_is_index_Test;
+    class json_pointer_test_point_Test;
   }
 #endif
 
@@ -29,6 +30,7 @@ namespace format
       friend class test::json_pointer_test_parse_Test;
       friend class test::json_pointer_test_decode_Test;
       friend class test::json_pointer_test_is_index_Test;
+      friend class test::json_pointer_test_point_Test;
     #endif
 
     /**
@@ -37,12 +39,21 @@ namespace format
      */
     json_pointer (const wchar_t * const);
 
+    ~json_pointer ();
+
+    /**
+     * @brief get
+     * @param json FIXME: THIS MUST BE CONST. JSON SHOULD HAVE operator [](const wchar_t *) const !!!
+     * @return
+     */
+    format::value & get (format::json &) const;
+
     /**
      * @brief get
      * @param json
      * @return
      */
-    format::value * get (format::json const &) const;
+    format::value & get (const wchar_t * const) const;
 
   protected:
     /**
@@ -59,12 +70,12 @@ namespace format
 
     /**
      * @brief _point
-     * @param json
+     * @param json FIXME: THIS MUST BE CONST. JSON SHOULD HAVE operator [](const wchar_t *) const !!!
      * @param cursor
      * @param end
      * @return
      */
-    format::value * _point (format::json const &, const std::vector<const wchar_t * const>::const_iterator, const std::vector<const wchar_t * const>::const_iterator) const;
+    format::value & _point (value &, std::vector<const wchar_t *>::const_iterator) const;
 
     /**
      * @brief The reference_token class
@@ -75,11 +86,11 @@ namespace format
       friend class json_pointer_test;
       /**
        * @brief The _sc enum Structural characters.
-       */
+       *
       enum _sc
       {
         path_separator  = 47,   // /
-      };
+      };*/
 
       /**
        * @brief __key_len
@@ -97,6 +108,10 @@ namespace format
       const wchar_t * __path_pointer;
 
     public:
+      enum sc
+      {
+        path_separator  = 47,   // /
+      };
       /**
        * @brief The __esc enum JSON path escape characters
        */
@@ -227,15 +242,18 @@ namespace format
         wchar_t * key_cursor = __key;
         wchar_t * const key_begin = key_cursor;
 
-        if (*__path_pointer == _sc::path_separator)
+        if (*__path_pointer == sc::path_separator)
           {
             if (*(__path_pointer + 1) == 0)
-              return L"/";
+              {
+                __path_pointer++;
+                return L"/";
+              }
 
             __path_pointer++; // Skip leading '/'
           }
 
-        while (*__path_pointer != 0 && *__path_pointer != _sc::path_separator)
+        while (*__path_pointer != 0 && *__path_pointer != sc::path_separator)
           key_cursor = decode (key_cursor, & __path_pointer);
 
         return key_begin;

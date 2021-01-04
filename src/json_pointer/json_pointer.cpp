@@ -5,10 +5,26 @@ format::json_pointer::json_pointer (const wchar_t * const json_pointer)
   (void) _parse (json_pointer);
 }
 
-format::value *
-format::json_pointer::get (const format::json & json) const
+format::json_pointer::~json_pointer ()
 {
-  return nullptr;
+  for (auto it = _json_pointer.begin (); it != _json_pointer.end (); )
+    it = _json_pointer.erase (it);
+}
+
+format::value &
+format::json_pointer::get (json & json) const
+{
+  return _point (json, _json_pointer.cbegin ());
+}
+
+format::value &
+format::json_pointer::get (const wchar_t * const json_text) const
+{
+  if (json_text == nullptr)
+    throw json_pointer_error ("JSON text is null");
+
+  format::json json (json_text);
+  return get (json);
 }
 
 std::size_t
@@ -21,15 +37,36 @@ format::json_pointer::_parse (const wchar_t * const json_pointer)
   const wchar_t * key = nullptr;
 
   while (*(key = rt.path_next ()) != 0)
-    _json_pointer.push_back (key);
+    {
+      wchar_t *clone = new wchar_t[wcslen (key) + 1]();
+      _json_pointer.push_back (wcscpy (clone, key));
+    }
 
   return _json_pointer.size ();
 }
 
-format::value *
-format::json_pointer::_point (const format::json & json,
-                              const std::vector<const wchar_t * const>::const_iterator cursor,
-                              const std::vector<const wchar_t * const>::const_iterator end) const
+format::value &
+format::json_pointer::_point (value & v, std::vector<const wchar_t *>::const_iterator cur) const
 {
-  return nullptr;
+  if (cur == _json_pointer.cend ())
+    return v;
+
+  const wchar_t *key = *cur;
+
+  if (v.type () == value::value_t::undefined_t)
+      throw json_pointer_error ("Key pointing elsewhere than the end of the path must exist. Non-existent key is preceding ", key);
+
+  if (*key == reference_token::sc::path_separator)
+    return v[L""];
+
+  if (v.type () == value::value_t::array_t)
+    {
+      if (! json_pointer::reference_token::is_index (key))
+        throw json_pointer_error ("Invalid array index: ", key);
+
+       if (*key == json_pointer::reference_token::index::new_index)
+        return v[v.count ()];
+    }
+
+  return _point (v[key], ++cur);
 }
