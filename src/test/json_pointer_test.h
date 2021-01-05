@@ -126,6 +126,34 @@ namespace format
       ASSERT_EQ (_errorc[ACTUAL], _errorc[EXPECTED]);
     }
 
+    TEST_F (json_pointer_test, is_index)
+    {
+      struct assert
+      {
+        const wchar_t *key;
+        bool is_index;
+        int assert_status;
+      };
+
+      std::vector<struct assert > test = {
+        { L"-", true, T_PASS },
+        { L"0", true, T_PASS },
+        { L"1", true, T_PASS },
+        { L"123", true, T_PASS },
+        { L"", false, T_PASS },
+        { L"01", false, T_PASS },
+        { L"a", false, T_PASS },
+        { L"1a", false, T_PASS },
+      };
+
+      TEST_IT_START
+
+        bool is_index = json_pointer::reference_token::is_index ((*it).key);
+        ASSERT_EQ ((*it).is_index, is_index);
+
+      TEST_IT_END
+    }
+
     TEST_F (json_pointer_test, point)
     {
       format::json j (  L"{ \"foo\": [\"bar\", \"baz\"],\
@@ -180,34 +208,60 @@ namespace format
       TEST_IT_END
     }
 
-    TEST_F (json_pointer_test, is_index)
+    TEST_F (json_pointer_test, get)
     {
+      format::json j (  L"{ \"foo\": [\"bar\", \"baz\"],\
+                        \"\": 0,\
+                        \"a/b\": 1,\
+                        \"c%d\": 2,\
+                        \"e^f\": 3,\
+                        \"g|h\": 4,\
+                        \"i\\j\": 5,\
+                        \" \": 7,\
+                        \"m~n\": 8 }" );
+
+      // FIXME: \"k\"l\": 6 parse error
+
       struct assert
       {
-        const wchar_t *key;
-        bool is_index;
+        const wchar_t *ref_token;
+        value::value_t type;
+        long num_val;
         int assert_status;
       };
 
       std::vector<struct assert > test = {
-        { L"-", true, T_PASS },
-        { L"0", true, T_PASS },
-        { L"1", true, T_PASS },
-        { L"123", true, T_PASS },
-        { L"", false, T_PASS },
-        { L"01", false, T_PASS },
-        { L"a", false, T_PASS },
-        { L"1a", false, T_PASS },
+        { L"", value::value_t::object_t, 0, T_PASS },
+        { L"/foo", value::value_t::array_t, 0, T_PASS },
+        { L"/foo/1", value::value_t::string_t, 0, T_PASS },
+        { L"/", value::value_t::number_t, 0, T_PASS },
+        { L"a~1b", value::value_t::number_t, 1, T_PASS },
+        { L"c%d", value::value_t::number_t, 2, T_PASS },
+        { L"g|h", value::value_t::number_t, 4, T_PASS },
+        { L"i\\j", value::value_t::number_t, 5, T_PASS },
+        { L"/ ", value::value_t::number_t, 7, T_PASS },
+        { L"m~0n", value::value_t::number_t, 8, T_PASS },
+        { L"/not", value::value_t::undefined_t, 0, T_PASS },
+        { nullptr, value::value_t::undefined_t, 0, T_FAIL },
+        { L"/not/found", value::value_t::undefined_t, 0, T_FAIL },
+        { L"/foo/foo", value::value_t::string_t, 0, T_FAIL },
       };
 
       TEST_IT_START
 
-        bool is_index = json_pointer::reference_token::is_index ((*it).key);
-        ASSERT_EQ ((*it).is_index, is_index);
+          json_pointer jp ((*it).ref_token);
+          format::value & v = jp.get (j);
+
+          ASSERT_EQ ((*it).type, v.type ());
+
+          if (v.type () == value::number_t)
+            {
+              format::number & n = static_cast<format::number &> (v);
+              ASSERT_EQ ( (*it).num_val, static_cast<long> (n.get ()));
+            }
 
       TEST_IT_END
     }
-
   } // namespace test
 } //  namespace format
 

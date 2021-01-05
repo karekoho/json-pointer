@@ -39,6 +39,9 @@ namespace format
      */
     json_pointer (const wchar_t * const);
 
+    /**
+     * @brief json_pointer
+     */
     ~json_pointer ();
 
     /**
