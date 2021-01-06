@@ -6,8 +6,8 @@ CONFIG -= qt
 INCLUDEPATH += /usr/local/include
 DEPENDPATH += /usr/local/include
 LIBS += -L/usr/local/lib -lgtest -lpthread
-LIBS += /usr/local/lib/libjson.a
-#macx: LIBS += -L/usr/local/lib/ -ljson
+#LIBS += /usr/local/lib/libjson.a
+macx: LIBS += -L/usr/local/lib/ -ljson
 
 SOURCES += \
         ../json_pointer/json_pointer.cpp \

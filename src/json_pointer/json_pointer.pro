@@ -8,8 +8,8 @@ CONFIG += c++11
 INCLUDEPATH += /usr/local/include
 DEPENDPATH += /usr/local/include
 
-#macx: LIBS += -L/usr/local/lib/ -ljson
-LIBS += /usr/local/lib/libjson.a
+macx: LIBS += -L/usr/local/lib/ -ljson
+#LIBS += /usr/local/lib/libjson.a
 
 
 SOURCES += \
@@ -22,6 +22,6 @@ HEADERS += \
 
 # Default rules for deployment.
 unix {
-    target.path = /usr/lib
+    target.path = /usr/local/lib
 }
 !isEmpty(target.path): INSTALLS += target
