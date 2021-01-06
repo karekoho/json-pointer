@@ -83,17 +83,14 @@ namespace format
     /**
      * @brief The reference_token class
      */
-    class json_pointer_test;
+    #ifdef UNIT_TEST_H
+      class json_pointer_test;
+    #endif
     class reference_token
     {
-      friend class json_pointer_test;
-      /**
-       * @brief The _sc enum Structural characters.
-       *
-      enum _sc
-      {
-        path_separator  = 47,   // /
-      };*/
+      #ifdef UNIT_TEST_H
+        friend class json_pointer_test;
+      #endif
 
       /**
        * @brief __key_len
@@ -111,10 +108,14 @@ namespace format
       const wchar_t * __path_pointer;
 
     public:
+      /**
+       * @brief The sc enum
+       */
       enum sc
       {
         path_separator  = 47,   // /
       };
+
       /**
        * @brief The __esc enum JSON path escape characters
        */
@@ -125,7 +126,6 @@ namespace format
         one               = 49,   // 1
         tilde             = 126   // ~
       };
-
 
       /**
        * @brief The __index enum
