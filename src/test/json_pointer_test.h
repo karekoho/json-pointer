@@ -193,6 +193,7 @@ namespace format
         { L"/not", value::value_t::undefined_t, 0, T_PASS },
         { L"/not/found", value::value_t::undefined_t, 0, T_FAIL },
         { L"/foo/foo", value::value_t::undefined_t, 0, T_FAIL },
+        { L"/foo/3/bar", value::value_t::undefined_t, 0, T_FAIL },
       };
 
       TEST_IT_START
