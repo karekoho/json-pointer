@@ -7,8 +7,11 @@ format::json_pointer::json_pointer (const wchar_t * const json_pointer)
 
 format::json_pointer::~json_pointer ()
 {
-  for (auto it = _json_pointer.begin (); it != _json_pointer.end (); )
+  for (auto it = _json_pointer.begin (); it != _json_pointer.end (); ) {
+    const wchar_t *key = *it;
     it = _json_pointer.erase (it);
+    delete [] key;
+   }
 }
 
 format::value &
