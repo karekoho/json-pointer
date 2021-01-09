@@ -5,7 +5,7 @@ CONFIG -= qt
 
 INCLUDEPATH += /usr/local/include
 DEPENDPATH += /usr/local/include
-#LIBS += /usr/local/lib/libjson.a
+# LIBS += /usr/local/lib/libjson.a
 macx: LIBS += -L/usr/local/lib/ -ljson
 macx: LIBS += -L/usr/local/lib/ -ljson_pointer
 

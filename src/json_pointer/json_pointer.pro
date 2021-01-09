@@ -28,4 +28,5 @@ unix {
 
 DISTFILES += \
     ../../CMakeLists.txt \
+    ../../README.md \
     CMakeLists.txt
