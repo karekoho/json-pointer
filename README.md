@@ -76,7 +76,7 @@ for (auto& jp : jp_list)
       format::json::value & v =  jp.get (j);
       
       // If value is not found, object type is undefined
-      if (v.type () == format::value::undefined_t)
+      if (v.type () == format::json::value::undefined_t)
         std::wcout << "Value not found" << std::endl;
       else
         std::wcout << v.stringify () << std::endl;
