@@ -88,18 +88,18 @@ for (auto& jp : jp_list)
     }
   }
 
-// output:
-{"i\j":5," ":7,"g|h":4,"a/b":1,"":0,"e^f":3,"c%d":2,"m~n":8,"foo":["bar","baz"]}
-["bar","baz"]
-"bar"
-0
-1
-2
-3
-4
-5
-7
-8
-Value not found
-Key pointing elsewhere than the end of the path must exist. Non-existent key is preceding 'found'
+//  output:
+//  {"i\j":5," ":7,"g|h":4,"a/b":1,"":0,"e^f":3,"c%d":2,"m~n":8,"foo":["bar","baz"]}
+//  ["bar","baz"]
+//  "bar"
+//  0
+//  1
+//  2
+//  3
+//  4
+//  5
+//  7
+//  8
+//  Value not found
+//  Key pointing elsewhere than the end of the path must exist. Non-existent key is preceding 'found'
 ```
