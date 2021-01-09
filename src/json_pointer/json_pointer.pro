@@ -25,3 +25,7 @@ unix {
     target.path = /usr/local/lib
 }
 !isEmpty(target.path): INSTALLS += target
+
+DISTFILES += \
+    ../../CMakeLists.txt \
+    CMakeLists.txt
