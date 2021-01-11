@@ -40,6 +40,8 @@ in your source code to use JSON Pointer.
 #include <iostream>
 #include <array>
 
+using namespace format;
+
 // Create a JSON pointer object
 json_pointer jp (L"/foo/1");
 
@@ -57,9 +59,9 @@ json j = L"{ \"foo\": [\"bar\", \"baz\"],\
 // Get the value the pointer refers to
 value & v = jp.value (j);
 
-std::wcout << v.as<const wchar_t *>() << std::endl;
+std::wcout << v.as<const wchar_t *> () << std::endl;
 // ouput: baz
-                        
+
 // Create an array of JSON pointers
 std::array<format::json_pointer, 13> jp_list = {
     // pointer:      // output:
@@ -81,16 +83,16 @@ std::array<format::json_pointer, 13> jp_list = {
 for (auto& jp : jp_list)
   {
     try {
-      // Look for the value in the JSON object
-      format::json::value & v =  jp.value (j);
-      
+      // Get the value the pointer refers to
+      json::value & v =  jp.value (j);
+
       // If value is not found, object type is undefined
-      if (v.type () == format::json::value::undefined_t)
+      if (v.type () == value::undefined_t)
         std::wcout << "Value not found" << std::endl;
       else
         std::wcout << v.stringify () << std::endl;
-        
-    } catch (format::json_pointer_error & e) {
+
+    } catch (json_pointer_error & e) {
       // Invalid pointer syntax or
       // a pointer that references a nonexistent value
       std::wcerr << e.what () << std::endl;
