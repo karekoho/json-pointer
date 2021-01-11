@@ -40,16 +40,25 @@ in your source code to use JSON Pointer.
 #include <iostream>
 #include <array>
 
+// Create a JSON pointer object
+json_pointer jp (L"/foo/1");
+
 // Create a JSON object
-format::json j = L"{ \"foo\": [\"bar\", \"baz\"],\
-                        \"\": 0,\
-                        \"a/b\": 1,\
-                        \"c%d\": 2,\
-                        \"e^f\": 3,\
-                        \"g|h\": 4,\
-                        \"i\\j\": 5,\
-                        \" \": 7,\
-                        \"m~n\": 8 }";
+json j = L"{ \"foo\": [\"bar\", \"baz\"],\
+              \"\": 0,\
+              \"a/b\": 1,\
+              \"c%d\": 2,\
+              \"e^f\": 3,\
+              \"g|h\": 4,\
+              \"i\\j\": 5,\
+              \" \": 7,\
+              \"m~n\": 8 }";
+
+// Get the value the pointer refers to
+value & v = jp.value (j);
+
+std::wcout << v.as<const wchar_t *>() << std::endl;
+// ouput: baz
                         
 // Create an array of JSON pointers
 std::array<format::json_pointer, 13> jp_list = {
@@ -73,7 +82,7 @@ for (auto& jp : jp_list)
   {
     try {
       // Look for the value in the JSON object
-      format::json::value & v =  jp.get (j);
+      format::json::value & v =  jp.value (j);
       
       // If value is not found, object type is undefined
       if (v.type () == format::json::value::undefined_t)
