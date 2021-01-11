@@ -15,19 +15,19 @@ format::json_pointer::~json_pointer ()
 }
 
 format::value &
-format::json_pointer::get (json & json) const
+format::json_pointer::value (json & json) const
 {
   return _point (json, _json_pointer.cbegin ());
 }
 
 format::value &
-format::json_pointer::get (const wchar_t * const json_text) const
+format::json_pointer::value (const wchar_t * const json_text) const
 {
   if (json_text == nullptr)
     throw json_pointer_error ("JSON text is null");
 
   format::json json (json_text);
-  return get (json);
+  return value (json);
 }
 
 std::size_t
@@ -49,7 +49,7 @@ format::json_pointer::_parse (const wchar_t * const json_pointer)
 }
 
 format::value &
-format::json_pointer::_point (value & v, std::vector<const wchar_t *>::const_iterator cur) const
+format::json_pointer::_point (class value & v, std::vector<const wchar_t *>::const_iterator cur) const
 {
   if (cur == _json_pointer.cend ())
     return v;

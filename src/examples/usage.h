@@ -6,19 +6,30 @@
 #include <format/json.h>
 #include <format/json_pointer.h>
 
+using namespace format;
+
 void
 usage ()
 {
+  // Create a JSON pointer object
+  json_pointer jp (L"/foo/1");
+
   // Create a JSON object
-  format::json j = L"{ \"foo\": [\"bar\", \"baz\"],\
-                          \"\": 0,\
-                          \"a/b\": 1,\
-                          \"c%d\": 2,\
-                          \"e^f\": 3,\
-                          \"g|h\": 4,\
-                          \"i\\j\": 5,\
-                          \" \": 7,\
-                          \"m~n\": 8 }";
+  json j = L"{ \"foo\": [\"bar\", \"baz\"],\
+                \"\": 0,\
+                \"a/b\": 1,\
+                \"c%d\": 2,\
+                \"e^f\": 3,\
+                \"g|h\": 4,\
+                \"i\\j\": 5,\
+                \" \": 7,\
+                \"m~n\": 8 }";
+
+  // Get the value the pointer refers to
+  value & v = jp.value (j);
+
+  std::wcout << v.as<const wchar_t *>() << std::endl;
+  // ouput: baz
 
   // Create an array of JSON pointers
   std::array<format::json_pointer, 13> jp_list = {
@@ -42,16 +53,16 @@ usage ()
   for (auto& jp : jp_list)
     {
       try {
-        // Look for the value in the JSON object.
-        format::json::value & v =  jp.get (j);
+        // Get the value the pointer refers to
+        json::value & v =  jp.value (j);
 
         // If value is not found, object type is undefined
-        if (v.type () == format::json::value::undefined_t)
+        if (v.type () == value::undefined_t)
           std::wcout << "Value not found" << std::endl;
         else
           std::wcout << v.stringify () << std::endl;
 
-      } catch (format::json_pointer_error & e) {
+      } catch (json_pointer_error & e) {
         // Invalid pointer syntax or
         // a pointer that references a nonexistent value
         std::wcerr << e.what () << std::endl;

@@ -45,18 +45,18 @@ namespace format
     ~json_pointer ();
 
     /**
-     * @brief get
+     * @brief value
      * @param json FIXME: THIS MUST BE CONST. JSON SHOULD HAVE operator [](const wchar_t *) const !!!
      * @return
      */
-    format::value & get (format::json &) const;
+    format::value & value (format::json &) const;
 
     /**
-     * @brief get
+     * @brief value
      * @param json
      * @return
      */
-    format::value & get (const wchar_t * const) const;
+    format::value & value (const wchar_t * const) const;
 
   protected:
     /**
@@ -78,7 +78,7 @@ namespace format
      * @param end
      * @return
      */
-    format::value & _point (value &, std::vector<const wchar_t *>::const_iterator) const;
+    format::value & _point (class value &, std::vector<const wchar_t *>::const_iterator) const;
 
     /**
      * @brief The reference_token class
