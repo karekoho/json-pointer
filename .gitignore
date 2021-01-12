@@ -1,8 +1,0 @@
-build/
-CMakeFiles/
-install_manifest.txt
-CMakeCache.txt
-Makefile
-cmake_install.cmake
-libjson_pointer.dylib
-src/examples/examples.pro.user
