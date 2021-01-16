@@ -267,56 +267,9 @@ namespace format
       TEST_IT_END
     }
 
-    /* TODO: ???? void
-    test_point ()
+    TEST_F (json_pointer_test, point_assign)
     {
-      format::json j (  L"{ \"foo\": [\"bar\", \"baz\"],\
-                        \"\": 0,\
-                        \"a/b\": 1,\
-                        \"c%d\": 2,\
-                        \"e^f\": 3,\
-                        \"g|h\": 4,\
-                        \"i\\j\": 5,\
-                        \" \": 7,\
-                        \"m~n\": 8 }" );
-
-      // FIXME: \"k\"l\": 6 parse error
-
-      struct assert
-      {
-        const wchar_t *ref_token;
-        value::value_t type;
-        long num_val;
-        int assert_status;
-      };
-
-      std::vector<struct assert > test = {
-        { L"", value::value_t::object_t, 0, PASS },
-        { L"/foo", value::value_t::array_t, 0, PASS },
-        { L"/foo/-", value::value_t::undefined_t, 0, PASS },
-        { L"/not", value::value_t::undefined_t, 0, PASS },
-        { L"/not/found", value::value_t::undefined_t, 0, FAIL },
-      };
-
-      TEST_IT_START
-
-          format::value & v = j.point ((*it).ref_token);
-          ASSERT_EQUAL_IDX ("point type", (*it).type, v.type ());
-
-          if (v.type () == value::number_t)
-            {
-              format::number & n = static_cast<format::number &> (v);
-              ASSERT_EQUAL_IDX ("point numeric value", (*it).num_val, static_cast<long> (n.get ()));
-            }
-
-      TEST_IT_END
-    } */
-
-    /* TODO: void
-    test_point_assign ()
-    {
-      format::json j (  L"{ \"foo\": [],\
-                        \"bar\": {} }" );
+      format::json j (  L"{ \"foo\": [],\"bar\": {} }" );
 
       struct assert
       {
@@ -327,10 +280,10 @@ namespace format
       };
 
       std::vector<struct assert > test = {
-        { { L"/foo/-", L"/foo/0" }, 1, value::value_t::number_t, PASS },
-        { { L"/foo/0", L"/foo/0" }, 2, value::value_t::number_t, PASS },
-        { { L"/bar/quux", L"/bar/quux"  }, 3, value::value_t::number_t, PASS },
-        { { L"/not/found", L"/not/found" }, 4, value::value_t::undefined_t, FAIL },
+        { { L"/foo/-", L"/foo/0" }, 1, value::value_t::number_t, T_PASS },
+        { { L"/foo/0", L"/foo/0" }, 2, value::value_t::number_t, T_PASS },
+        { { L"/bar/quux", L"/bar/quux"  }, 3, value::value_t::number_t, T_PASS },
+        { { L"/not/found", L"/not/found" }, 4, value::value_t::undefined_t, T_FAIL },
       };
 
       TEST_IT_START
@@ -338,16 +291,16 @@ namespace format
           j.point ((*it).ref_token[0]) = (*it).new_val;
           format::value & v = j.point ((*it).ref_token[1]);
 
-          ASSERT_EQUAL_IDX ("point type", (*it).type, v.type ());
+          ASSERT_EQ ((*it).type, v.type ());
 
           if (v.type () == value::number_t)
             {
               format::number & n = static_cast<format::number &> (v);
-              ASSERT_EQUAL_IDX ("point numeric value", (*it).new_val, static_cast<long> (n.get ()));
+              ASSERT_EQ ((*it).new_val, static_cast<long> (n.get ()));
             }
 
       TEST_IT_END
-    } */
+    }
 
   } // namespace test
 } //  namespace format
