@@ -7,6 +7,8 @@
 
 namespace format
 {
+  namespace json
+  {
   namespace test
   {
     #define T_PASS  0
@@ -111,6 +113,7 @@ namespace format
       }
     };
   } // namespace test
+ } // namespace json
 } // namespace format
 
 #endif // UNIT_TEST_H

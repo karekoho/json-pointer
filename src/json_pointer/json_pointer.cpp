@@ -1,11 +1,11 @@
 #include "json_pointer.h"
 
-format::json_pointer::json_pointer (const wchar_t * const json_pointer)
+format::json::json_pointer::json_pointer (const wchar_t * const json_pointer)
 {
   (void) _parse (json_pointer);
 }
 
-format::json_pointer::~json_pointer ()
+format::json::json_pointer::~json_pointer ()
 {
   for (auto it = _json_pointer.begin (); it != _json_pointer.end (); ) {
     const wchar_t *key = *it;
@@ -14,24 +14,24 @@ format::json_pointer::~json_pointer ()
    }
 }
 
-format::value &
-format::json_pointer::value (json & json) const
+format::json::value &
+format::json::json_pointer::value (json & json) const
 {
   return _point (json, _json_pointer.cbegin ());
 }
 
-format::value &
-format::json_pointer::value (const wchar_t * const json_text) const
+format::json::value &
+format::json::json_pointer::value (const wchar_t * const json_text) const
 {
   if (json_text == nullptr)
     throw json_pointer_error ("JSON text is null");
 
-  format::json json (json_text);
+  format::json::json json (json_text);
   return value (json);
 }
 
 std::size_t
-format::json_pointer::_parse (const wchar_t * const json_pointer)
+format::json::json_pointer::_parse (const wchar_t * const json_pointer)
 {
   if (json_pointer == nullptr)
     throw json_pointer_error ("JSON pointer is null");
@@ -48,8 +48,8 @@ format::json_pointer::_parse (const wchar_t * const json_pointer)
   return _json_pointer.size ();
 }
 
-format::value &
-format::json_pointer::_point (class value & v, std::vector<const wchar_t *>::const_iterator cur) const
+format::json::value &
+format::json::json_pointer::_point (class value & v, std::vector<const wchar_t *>::const_iterator cur) const
 {
   if (cur == _json_pointer.cend ())
     return v;
