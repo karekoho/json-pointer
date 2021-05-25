@@ -68,7 +68,7 @@ format::json::json_pointer::_point (class value & v, std::vector<const wchar_t *
         throw json_pointer_error ("Invalid array index: ", key);
 
        if (*key == json_pointer::reference_token::index::new_index)
-        return v[v.count ()];
+        return v[v.size ()];
     }
 
   return _point (v[key], ++cur);

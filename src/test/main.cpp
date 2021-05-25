@@ -2,7 +2,7 @@
 
 #include "unit_test.h"
 #include "json_pointer_test.h"
-#include <format/json.h>
+// #include <format/json.h>
 
 int
 main (int argc, char *argv[])

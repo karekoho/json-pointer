@@ -48,10 +48,17 @@ namespace format
 
       /**
        * @brief value
-       * @param json FIXME: THIS MUST BE CONST. JSON SHOULD HAVE operator [](const wchar_t *) const !!!
+       * @param json
        * @return
        */
       format::json::value & value (format::json::json &) const;
+
+      /**
+       * @brief value
+       * @param value
+       * @return
+       * TODO: format::json::value & value (format::json::value &) const;
+       */
 
       /**
        * @brief value
