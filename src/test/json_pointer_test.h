@@ -268,6 +268,29 @@ namespace format
 
         TEST_IT_END
       }
+
+      TEST_F (json_pointer_test, value_value)
+      {
+        format::json::json j (  L"{ \"foo\": [\"bar\", \"baz\"],\
+                                    \"\": 0,\
+                                    \"a/b\": 1,\
+                                    \"c%d\": 2,\
+                                    \"e^f\": 3,\
+                                    \"g|h\": 4,\
+                                    \"i\\j\": 5,\
+                                    \" \": 7,\
+                                    \"m~n\": 8 }" );
+
+        json_pointer jp (L"/foo");
+        format::json::value & v = jp.value (j);
+
+        ASSERT_NO_THROW ({
+          json_pointer jp (L"/0");
+          format::json::value & vv = jp.value (v);
+
+          ASSERT_EQ (value::string_t, vv.type ());
+        });
+      }
     } // namespace test
   } // nanespace json
 } // namespace format

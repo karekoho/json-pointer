@@ -57,8 +57,8 @@ namespace format
        * @brief value
        * @param value
        * @return
-       * TODO: format::json::value & value (format::json::value &) const;
        */
+      format::json::value & value (format::json::value &) const;
 
       /**
        * @brief value

@@ -21,6 +21,12 @@ format::json::json_pointer::value (json & json) const
 }
 
 format::json::value &
+format::json::json_pointer::value (class value & v) const
+{
+  return _point (v, _json_pointer.cbegin ());
+}
+
+format::json::value &
 format::json::json_pointer::value (const wchar_t * const json_text) const
 {
   if (json_text == nullptr)
