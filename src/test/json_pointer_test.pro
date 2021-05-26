@@ -16,6 +16,7 @@ SOURCES += \
 
 HEADERS += \
     ../json_pointer/json_pointer.h \
+    ../json_pointer/json_pointer_exception.h \
     json_pointer_test.h \
     unit_test.h
 

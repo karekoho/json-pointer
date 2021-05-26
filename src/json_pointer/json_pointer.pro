@@ -16,7 +16,7 @@ SOURCES += \
     json_pointer.cpp
 
 HEADERS += \
-    json_exception.h \
+    json_pointer_exception.h \
     json_pointer_global.h \
     json_pointer.h
 

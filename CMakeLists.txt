@@ -7,7 +7,7 @@ set(SOURCES
 # headers
     src/json_pointer/json_pointer.h
     src/json_pointer/json_pointer_global.h
-    src/json_pointer/json_exception.h)
+    src/json_pointer/json_pointer_exception.h)
 
 # Create libjson_pointer
 add_library(json_pointer SHARED ${SOURCES})

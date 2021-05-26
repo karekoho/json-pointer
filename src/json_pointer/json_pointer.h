@@ -1,10 +1,10 @@
 #ifndef JSON_POINTER_H
 #define JSON_POINTER_H
 
-#include "json_pointer_global.h"
-#include "json_exception.h"
 #include <format/json.h>
 #include <wctype.h>
+#include "json_pointer_global.h"
+#include "json_pointer_exception.h"
 
 namespace format
 {
