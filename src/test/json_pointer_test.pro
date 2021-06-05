@@ -8,7 +8,7 @@ INCLUDEPATH += /usr/local/include
 DEPENDPATH += /usr/local/include
 LIBS += -L/usr/local/lib -lgtest -lpthread
 #LIBS += /usr/local/lib/libjson.a
-macx: LIBS += -L/usr/local/lib/ -ljson
+macx: LIBS += -L/usr/local/lib/ -lformat-json
 
 SOURCES += \
         ../json_pointer/json_pointer.cpp \
@@ -21,4 +21,5 @@ HEADERS += \
     unit_test.h
 
 DISTFILES += \
+    ../../CMakeLists.txt \
     ../../build/macos/test/release/CMakeLists.txt

@@ -8,12 +8,12 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 set(PATH "../../../../src/test/")
 set(SOURCES
     ${PATH}main.cpp
-    ${PATH}json_pointer_exception.h
+    ${PATH}json_pointer_test.h
     ${PATH}unit_test.h)
 
 find_library (GTEST_LIB gtest)
-find_library (JSON_LIB json)
-find_library (JSON_POINTER_LIB json_pointer)
+find_library (JSON_LIB format-json)
+find_library (JSON_POINTER_LIB format-json_pointer)
 
 message(${GTEST_LIB})
 message(${JSON_LIB})
