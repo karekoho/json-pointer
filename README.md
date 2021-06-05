@@ -43,7 +43,7 @@ in your source code to use JSON Pointer.
 using namespace format;
 
 // Create a JSON pointer object
-json::json_pointer jp (L"/foo/1");
+const json::json_pointer jp (L"/foo/1");
 
 // Create a JSON object
 json::json j = L"{ \"foo\": [\"bar\", \"baz\"],\
@@ -63,7 +63,7 @@ std::wcout << v.as<const wchar_t *>() << std::endl;
 // ouput: baz
 
 // Create an array of JSON pointers
-std::array<format::json::json_pointer, 13> jp_list = {
+const std::array<format::json::json_pointer, 13> jp_list = {
     // pointer:      // output:
     L"",            // the whole document
     L"/foo",        // ["bar", "baz"]
@@ -92,7 +92,7 @@ for (auto& jp : jp_list)
       else
         std::wcout << v.stringify () << std::endl;
 
-    } catch (json::json_pointer_error & e) {
+    } catch (const json::json_pointer_error & e) {
       // Invalid pointer syntax or
       // a pointer that references a nonexistent value
       std::wcerr << e.what () << std::endl;
