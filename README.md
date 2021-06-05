@@ -14,7 +14,7 @@ In the _root of the repository_ run the following commands:
 cmake . 
 make & make install
 ```
-A shared library called `libjson` will be created in `/usr/local/lib`.
+A shared library called `libformat-json` will be created in `/usr/local/lib`.
 The development headers will be found in `/usr/local/include/format`.
 ### 2. Install JSON Pointer:
 ```
@@ -25,7 +25,7 @@ In the _root of the repository_ run the following commands:
 cmake . 
 make & make install
 ```
-A shared library called `libjson_pointer` will be created in `/usr/local/lib`
+A shared library called `libformat-json-pointer` will be created in `/usr/local/lib`
 The development headers will be found in `/usr/local/include/format`
 ### 3. Include 
 ```c++

@@ -22,4 +22,5 @@ HEADERS += \
 
 DISTFILES += \
     ../../CMakeLists.txt \
+    ../../README.md \
     ../../build/macos/test/release/CMakeLists.txt

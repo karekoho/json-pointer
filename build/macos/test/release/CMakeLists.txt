@@ -13,7 +13,7 @@ set(SOURCES
 
 find_library (GTEST_LIB gtest)
 find_library (JSON_LIB format-json)
-find_library (JSON_POINTER_LIB format-json_pointer)
+find_library (JSON_POINTER_LIB format-json-pointer)
 
 message(${GTEST_LIB})
 message(${JSON_LIB})
