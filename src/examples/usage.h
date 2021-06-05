@@ -14,20 +14,20 @@ usage ()
   const json::json_pointer jp (L"/foo/1");
 
   // Create a JSON object
-  json::json j = L"{ \"foo\": [\"bar\", \"baz\"],\
-                \"\": 0,\
-                \"a/b\": 1,\
-                \"c%d\": 2,\
-                \"e^f\": 3,\
-                \"g|h\": 4,\
-                \"i\\j\": 5,\
-                \" \": 7,\
-                \"m~n\": 8 }";
+  json::json j = L"{  \"foo\": [\"bar\", \"baz\"],\
+                      \"\": 0,\
+                      \"a/b\": 1,\
+                      \"c%d\": 2,\
+                      \"e^f\": 3,\
+                      \"g|h\": 4,\
+                      \"i\\j\": 5,\
+                      \" \": 7,\
+                      \"m~n\": 8 }";
 
   // Get the value the pointer refers to
   json::value & v = jp.value (j);
 
-  std::wcout << v.as<const wchar_t *>() << std::endl;
+  std::wcout << v.as<const wchar_t *> () << std::endl;
   // ouput: baz
 
   // Create an array of JSON pointers
@@ -59,7 +59,11 @@ usage ()
         if (v.type () == json::value::undefined_t)
           std::wcout << "Value not found" << std::endl;
         else
-          std::wcout << v.stringify () << std::endl;
+          {
+            const wchar_t *str_value = v.stringify ();
+            std::wcout << str_value << std::endl;
+            delete [] str_value;
+          }
 
       } catch (const json::json_pointer_error & e) {
         // Invalid pointer syntax or
