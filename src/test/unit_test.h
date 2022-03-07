@@ -4,6 +4,7 @@
 #include <gtest/gtest.h>
 #include <exception>
 #include <algorithm>
+#include <cstdio>
 
 namespace format
 {

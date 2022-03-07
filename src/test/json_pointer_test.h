@@ -165,10 +165,9 @@ namespace format
                           \"e^f\": 3,\
                           \"g|h\": 4,\
                           \"i\\j\": 5,\
+                          \"k\"l\": 6,\
                           \" \": 7,\
                           \"m~n\": 8 }" );
-
-        // FIXME: \"k\"l\": 6 parse error
 
         struct assert
         {
@@ -190,6 +189,7 @@ namespace format
           { L"c%d", value::value_t::number_t, 2, T_PASS },
           { L"g|h", value::value_t::number_t, 4, T_PASS },
           { L"i\\j", value::value_t::number_t, 5, T_PASS },
+          { L"k\"l", value::value_t::number_t, 6, T_PASS },
           { L"/ ", value::value_t::number_t, 7, T_PASS },
           { L"m~0n", value::value_t::number_t, 8, T_PASS },
           { L"/not", value::value_t::undefined_t, 0, T_PASS },
@@ -223,10 +223,9 @@ namespace format
                           \"e^f\": 3,\
                           \"g|h\": 4,\
                           \"i\\j\": 5,\
+                          \"k\"l\": 6,\
                           \" \": 7,\
                           \"m~n\": 8 }" );
-
-        // FIXME: \"k\"l\": 6 parse error
 
         struct assert
         {
@@ -245,6 +244,7 @@ namespace format
           { L"c%d", value::value_t::number_t, 2, T_PASS },
           { L"g|h", value::value_t::number_t, 4, T_PASS },
           { L"i\\j", value::value_t::number_t, 5, T_PASS },
+          { L"k\"l", value::value_t::number_t, 6, T_PASS },
           { L"/ ", value::value_t::number_t, 7, T_PASS },
           { L"m~0n", value::value_t::number_t, 8, T_PASS },
           { L"/not", value::value_t::undefined_t, 0, T_PASS },
